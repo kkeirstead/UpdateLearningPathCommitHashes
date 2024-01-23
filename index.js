@@ -27,8 +27,10 @@ const main = async () => {
           const learningPathFileFullPath = learningPathDirectory + "/" + learningPathFile
           const learningPathFileContent = fs.readFileSync(learningPathFileFullPath, "utf8")
 
+          console.log("Learning Path File: " + learningPathFileFullPath);
+
           // Replace all instances of the oldHash with the newHash
-          const replacedLearningPathFileContent = learningPathFileContent.replace(new RegExp(oldHash, 'g'), newHash);
+          const replacedLearningPathFileContent = learningPathFileContent.replace(oldHash, newHash);
 
           // Use actionUtils to write the updated learning path file to the repo
           fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, replacedLearningPathFileContent, "utf8");
