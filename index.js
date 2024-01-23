@@ -11,7 +11,8 @@ const main = async () => {
     const newHash = core.getInput('newHash', { required: true });
     
     // Write New Hash to File
-    actionUtils.writeFile(learningPathHashFile, newHash);
+    fs.writeFileSync(learningPathHashFile, newHash, "utf8");
+    //actionUtils.writeFile(learningPathHashFile, newHash);
 
     // Scan each file in the learningPaths directory
     fs.readdir(learningPathDirectory, (err, files) => {
