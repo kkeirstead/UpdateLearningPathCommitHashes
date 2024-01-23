@@ -14,6 +14,10 @@ const main = async () => {
     
     // Write New Hash to File
     fs.writeFileSync(learningPathHashFile, newHash, "utf8");
+
+    modifiedFiles.push(learningPathHashFile)
+
+    SetOutput('modifiedFiles', modifiedFiles.join(' '))
     //actionUtils.writeFile(learningPathHashFile, newHash);
 
     // Scan each file in the learningPaths directory
@@ -33,7 +37,7 @@ const main = async () => {
 
           if (learningPathFileContent !== replacedLearningPathFileContent) {
             modifiedFiles.push(learningPathFileFullPath)
-            SetOutput('modifiedFiles', modifiedFiles)
+            SetOutput('modifiedFiles', modifiedFiles.join(' '))
           }
 
 
