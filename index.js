@@ -6,15 +6,18 @@ const main = async () => {
   try {
     //const [core] = await actionUtils.installAndRequirePackages("@actions/core");
     const learningPathDirectory = core.getInput('learningPathsDirectory', { required: true });
+    const learningPathHashFile = core.getInput('learningPathHashFile', { required: true });
     const oldHash = core.getInput('oldHash', { required: true });
     const newHash = core.getInput('newHash', { required: true });
     
     if (changedFilePaths === null || changedFilePaths.trim() === "") { return }
 
+    // Write New Hash to File
+    actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, newHash);
+
     // Scan each file in the learningPaths directory
     fs.readdir(learningPathDirectory, (err, files) => {
       files.forEach(learningPathFile => {
-
         try {
           const learningPathFileContent = fs.readFileSync(learningPathDirectory + "/" + learningPathFile, "utf8")
 

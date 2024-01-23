@@ -7,6 +7,9 @@ inputs:
   learningPathsDirectory:
     description: 'The directory where the learning paths reside (e.g. documentation/learningPath)'
     required: true
+  learningPathHashFile:
+    description: 'The file where the commit hash being used for the learning paths is kept'
+    required: true
   newHash:
     description: 'The commit hash used to replace the oldHash in the learning path directory'
     required: true
