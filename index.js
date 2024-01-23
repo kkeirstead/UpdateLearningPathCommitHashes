@@ -17,7 +17,7 @@ const main = async () => {
 
     modifiedFiles.push(learningPathHashFile)
 
-    SetOutput('modifiedFiles', modifiedFiles.join(' '))
+    core.setOutput('modifiedFiles', modifiedFiles.join(' '))
     //actionUtils.writeFile(learningPathHashFile, newHash);
 
     // Scan each file in the learningPaths directory
@@ -37,7 +37,7 @@ const main = async () => {
 
           if (learningPathFileContent !== replacedLearningPathFileContent) {
             modifiedFiles.push(learningPathFileFullPath)
-            SetOutput('modifiedFiles', modifiedFiles.join(' '))
+            core.setOutput('modifiedFiles', modifiedFiles.join(' '))
           }
 
 
