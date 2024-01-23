@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const fs = require('fs');
-const actionUtils = require('../action-utils.js');
+//const actionUtils = require('../action-utils.js');
 
 const main = async () => {
   try {
@@ -13,7 +13,7 @@ const main = async () => {
     if (changedFilePaths === null || changedFilePaths.trim() === "") { return }
 
     // Write New Hash to File
-    actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, newHash);
+    actionUtils.writeFile(learningPathHashFile, newHash);
 
     // Scan each file in the learningPaths directory
     fs.readdir(learningPathDirectory, (err, files) => {
@@ -25,7 +25,8 @@ const main = async () => {
           const headLearningPathFileContentStr = learningPathFileContent.replace(new RegExp(oldHash, 'g'), newHash);
 
           // Use actionUtils to write the updated learning path file to the repo
-          actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, headLearningPathFileContentStr);
+          fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, headLearningPathFileContentStr, "utf8");
+          //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, headLearningPathFileContentStr);
 
         } catch (error) {
           console.log("Error: " + error)
