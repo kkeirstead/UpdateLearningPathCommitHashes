@@ -10,8 +10,6 @@ const main = async () => {
     const oldHash = core.getInput('oldHash', { required: true });
     const newHash = core.getInput('newHash', { required: true });
     
-    if (changedFilePaths === null || changedFilePaths.trim() === "") { return }
-
     // Write New Hash to File
     actionUtils.writeFile(learningPathHashFile, newHash);
 
@@ -22,11 +20,11 @@ const main = async () => {
           const learningPathFileContent = fs.readFileSync(learningPathDirectory + "/" + learningPathFile, "utf8")
 
           // Replace all instances of the oldHash with the newHash
-          const headLearningPathFileContentStr = learningPathFileContent.replace(new RegExp(oldHash, 'g'), newHash);
+          const learningPathFileContentStr = learningPathFileContent.replace(new RegExp(oldHash, 'g'), newHash);
 
           // Use actionUtils to write the updated learning path file to the repo
-          fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, headLearningPathFileContentStr, "utf8");
-          //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, headLearningPathFileContentStr);
+          fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, learningPathFileContentStr, "utf8");
+          //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, learningPathFileContentStr);
 
         } catch (error) {
           console.log("Error: " + error)
