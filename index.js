@@ -2,47 +2,39 @@ const core = require('@actions/core');
 const fs = require('fs');
 //const actionUtils = require('../action-utils.js');
 
+let modifiedFiles = [];
+
+function AppendModifiedFiles(path)
+{
+  modifiedFiles.push(path)
+  core.setOutput('modifiedFiles', modifiedFiles.join(' '))
+}
+
 const main = async () => {
   try {
-    //const [core] = await actionUtils.installAndRequirePackages("@actions/core");
     const learningPathDirectory = core.getInput('learningPathsDirectory', { required: true });
     const learningPathHashFile = core.getInput('learningPathHashFile', { required: true });
     const oldHash = core.getInput('oldHash', { required: true });
     const newHash = core.getInput('newHash', { required: true });
 
-    let modifiedFiles = [];
-    
-    // Write New Hash to File
     fs.writeFileSync(learningPathHashFile, newHash, "utf8");
-
-    modifiedFiles.push(learningPathHashFile)
-
-    core.setOutput('modifiedFiles', modifiedFiles.join(' '))
-    //actionUtils.writeFile(learningPathHashFile, newHash);
+    AppendModifiedFiles(learningPathHashFile)
 
     // Scan each file in the learningPaths directory
-    fs.readdir(learningPathDirectory, (err, files) => {
+    fs.readdir(learningPathDirectory, (_, files) => {
       files.forEach(learningPathFile => {
         try {
-          const learningPathFileFullPath = learningPathDirectory + "/" + learningPathFile
-          const learningPathFileContent = fs.readFileSync(learningPathFileFullPath, "utf8")
+          const fullPath = learningPathDirectory + "/" + learningPathFile
+          const content = fs.readFileSync(fullPath, "utf8")
 
-          console.log("Learning Path File: " + learningPathFileFullPath);
+          const replacedContent = content.replace(new RegExp(oldHash, 'g'), newHash);
 
-          // Replace all instances of the oldHash with the newHash
-          const replacedLearningPathFileContent = learningPathFileContent.replace(new RegExp(oldHash, 'g'), newHash);
-
-          // Use actionUtils to write the updated learning path file to the repo
-          fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, replacedLearningPathFileContent, "utf8");
+          fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, replacedContent, "utf8");
           //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, learningPathFileContentStr);
 
-
-          if (learningPathFileContent !== replacedLearningPathFileContent) {
-            modifiedFiles.push(learningPathFileFullPath)
-            core.setOutput('modifiedFiles', modifiedFiles.join(' '))
+          if (content !== replacedContent) {
+            AppendModifiedFiles(fullPath)
           }
-
-
         } catch (error) {
           console.log("Error: " + error)
           console.log("Could not find learning path file: " + learningPathFile)
