@@ -30,19 +30,24 @@ const main = async () => {
 
           var replacedContent = ""
 
+          console.log("suggestions: " + suggestions)
           // for each suggestion, check if the old version of the link is in the file. If so, replace it with the new version of the link
           if (suggestions !== null && suggestions.trim() !== "") {
             const suggestionsArray = suggestions.split(',') // hardcoding in known formatting from the first workflow
             suggestionsArray.forEach(suggestion => {
+              console.log("suggestion: " + suggestion)
               const suggestionArray = suggestion.split(' -> ')
               const oldLink = suggestionArray[0]
               const newLink = suggestionArray[1].split(' ')[0]
+              console.log("oldLink: " + oldLink)
+              console.log("newLink: " + newLink)
 
               replacedContent = replacedContent.replace(new RegExp(oldLink, 'g'), newLink);
+              console.log("replacedContent: " + replacedContent)
             })
           }
 
-          replacedContent = content.replace(new RegExp(oldHash, 'g'), newHash);
+          replacedContent = replacedContent.replace(new RegExp(oldHash, 'g'), newHash);
 
           fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, replacedContent, "utf8");
           //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, learningPathFileContentStr);
