@@ -2,6 +2,8 @@ const core = require('@actions/core');
 const fs = require('fs');
 //const actionUtils = require('../action-utils.js');
 
+const suggestionsSeparator = ',';
+const oldNewLinkSeparator = ' -> ';
 let modifiedFiles = [];
 
 function AppendModifiedFiles(path)
@@ -30,26 +32,17 @@ const main = async () => {
 
           var replacedContent = content
 
-          console.log("suggestions: " + suggestions)
-          // for each suggestion, check if the old version of the link is in the file. If so, replace it with the new version of the link
           if (suggestions !== null && suggestions.trim() !== "") {
-            const suggestionsArray = suggestions.split(',') // hardcoding in known formatting from the first workflow
+            const suggestionsArray = suggestions.split(suggestionsSeparator)
             suggestionsArray.forEach(suggestion => {
-              console.log("suggestion: " + suggestion)
-              const suggestionArray = suggestion.split(' -> ')
-              const oldLink = suggestionArray[0]
-              const newLink = suggestionArray[1].split(' | ')[0]
+              const suggestionArray = suggestion.split(suggestionsSeparator)
+              var oldLink = suggestionArray[0].substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
+              var newLink = suggestionArray[1].substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
 
-              // trim oldLink. it should make a substring that starts after the first ( and ends before the last )
-              var oldLinkTrimmed = oldLink.substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
-              var newLinkTrimmed = newLink.substring(newLink.indexOf('(') + 1, newLink.lastIndexOf(')'))
+              oldLink = oldLink.substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
+              newLink = newLink.substring(newLink.indexOf('(') + 1, newLink.lastIndexOf(')'))
 
-
-              console.log("oldLink: " + oldLinkTrimmed)
-              console.log("newLink: " + newLinkTrimmed)
-
-              replacedContent = replacedContent.replace(new RegExp(oldLinkTrimmed, 'g'), newLinkTrimmed);
-              console.log("replacedContent: " + replacedContent)
+              replacedContent = replacedContent.replace(new RegExp(oldLink, 'g'), newLink);
             })
           }
 
