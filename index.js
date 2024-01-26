@@ -35,7 +35,7 @@ const main = async () => {
           if (suggestions !== null && suggestions.trim() !== "") {
             const suggestionsArray = suggestions.split(suggestionsSeparator)
             suggestionsArray.forEach(suggestion => {
-              const suggestionArray = suggestion.split(suggestionsSeparator)
+              const suggestionArray = suggestion.split(oldNewLinkSeparator)
               var oldLink = suggestionArray[0].substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
               var newLink = suggestionArray[1].substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
 
