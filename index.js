@@ -36,12 +36,10 @@ const main = async () => {
             const suggestionsArray = suggestions.split(suggestionsSeparator)
             suggestionsArray.forEach(suggestion => {
               const suggestionArray = suggestion.split(oldNewLinkSeparator)
-              var oldLink = suggestionArray[0].substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
-              var newLink = suggestionArray[1].substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
-
+              var oldLink = suggestionArray[0]
+              var newLink = suggestionArray[1]
               oldLink = oldLink.substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
               newLink = newLink.substring(newLink.indexOf('(') + 1, newLink.lastIndexOf(')'))
-
               replacedContent = replacedContent.replace(new RegExp(oldLink, 'g'), newLink);
             })
           }
