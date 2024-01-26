@@ -7,6 +7,9 @@ inputs:
   learningPathsDirectory:
     description: 'The directory where the learning paths reside (e.g. documentation/learningPath)'
     required: true
+  suggestions:
+    description: 'The auto-generated suggestions from the prior workflow'
+    required: false
   learningPathHashFile:
     description: 'The file where the commit hash being used for the learning paths is kept'
     required: true

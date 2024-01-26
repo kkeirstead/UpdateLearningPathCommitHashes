@@ -14,6 +14,7 @@ const main = async () => {
   try {
     const learningPathDirectory = core.getInput('learningPathsDirectory', { required: true });
     const learningPathHashFile = core.getInput('learningPathHashFile', { required: true });
+    const suggestions = core.getInput('suggestions', { required: false });
     const oldHash = core.getInput('oldHash', { required: true });
     const newHash = core.getInput('newHash', { required: true });
 
@@ -27,7 +28,21 @@ const main = async () => {
           const fullPath = learningPathDirectory + "/" + learningPathFile
           const content = fs.readFileSync(fullPath, "utf8")
 
-          const replacedContent = content.replace(new RegExp(oldHash, 'g'), newHash);
+          var replacedContent = ""
+
+          // for each suggestion, check if the old version of the link is in the file. If so, replace it with the new version of the link
+          if (suggestions !== null && suggestions.trim() !== "") {
+            const suggestionsArray = suggestions.split(',') // hardcoding in known formatting from the first workflow
+            suggestionsArray.forEach(suggestion => {
+              const suggestionArray = suggestion.split(' -> ')
+              const oldLink = suggestionArray[0]
+              const newLink = suggestionArray[1].split(' ')[0]
+
+              replacedContent = replacedContent.replace(new RegExp(oldLink, 'g'), newLink);
+            })
+          }
+
+          replacedContent = content.replace(new RegExp(oldHash, 'g'), newHash);
 
           fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, replacedContent, "utf8");
           //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, learningPathFileContentStr);
