@@ -28,7 +28,7 @@ const main = async () => {
           const fullPath = learningPathDirectory + "/" + learningPathFile
           const content = fs.readFileSync(fullPath, "utf8")
 
-          var replacedContent = ""
+          var replacedContent = content
 
           console.log("suggestions: " + suggestions)
           // for each suggestion, check if the old version of the link is in the file. If so, replace it with the new version of the link
@@ -38,11 +38,17 @@ const main = async () => {
               console.log("suggestion: " + suggestion)
               const suggestionArray = suggestion.split(' -> ')
               const oldLink = suggestionArray[0]
-              const newLink = suggestionArray[1].split(' ')[0]
-              console.log("oldLink: " + oldLink)
-              console.log("newLink: " + newLink)
+              const newLink = suggestionArray[1].split(' | ')[0]
 
-              replacedContent = replacedContent.replace(new RegExp(oldLink, 'g'), newLink);
+              // trim oldLink. it should make a substring that starts after the first ( and ends before the last )
+              var oldLinkTrimmed = oldLink.substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
+              var newLinkTrimmed = newLink.substring(newLink.indexOf('(') + 1, newLink.lastIndexOf(')'))
+
+
+              console.log("oldLink: " + oldLinkTrimmed)
+              console.log("newLink: " + newLinkTrimmed)
+
+              replacedContent = replacedContent.replace(new RegExp(oldLinkTrimmed, 'g'), newLinkTrimmed);
               console.log("replacedContent: " + replacedContent)
             })
           }
