@@ -12,6 +12,11 @@ function AppendModifiedFiles(path)
   core.setOutput('modifiedFiles', modifiedFiles.join(' '))
 }
 
+function ReplaceOldWithNewText(content, oldText, newText)
+{
+  return content.replace(new RegExp(oldText, 'g'), newText);
+}
+
 const main = async () => {
   try {
     const learningPathDirectory = core.getInput('learningPathsDirectory', { required: true });
@@ -40,11 +45,11 @@ const main = async () => {
               var newLink = suggestionArray[1]
               oldLink = oldLink.substring(oldLink.indexOf('(') + 1, oldLink.lastIndexOf(')'))
               newLink = newLink.substring(newLink.indexOf('(') + 1, newLink.lastIndexOf(')'))
-              replacedContent = replacedContent.replace(new RegExp(oldLink, 'g'), newLink);
+              replacedContent = ReplaceOldWithNewText(replacedContent, oldLink, newLink)
             })
           }
 
-          replacedContent = replacedContent.replace(new RegExp(oldHash, 'g'), newHash);
+          replacedContent = ReplaceOldWithNewText(replacedContent, oldHash, newHash)
 
           fs.writeFileSync(learningPathDirectory + "/" + learningPathFile, replacedContent, "utf8");
           //actionUtils.writeFile(learningPathDirectory + "/" + learningPathFile, learningPathFileContentStr);
