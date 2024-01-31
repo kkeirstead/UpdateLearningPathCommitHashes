@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const fs = require('fs');
+const headPathPrefix = "head/";
 //const actionUtils = require('../action-utils.js');
 
 const suggestionsSeparator = ',';
@@ -19,8 +20,8 @@ function ReplaceOldWithNewText(content, oldText, newText)
 
 const main = async () => {
   try {
-    const learningPathDirectory = core.getInput('learningPathsDirectory', { required: true });
-    const learningPathHashFile = core.getInput('learningPathHashFile', { required: true });
+    const learningPathDirectory = headPathPrefix + core.getInput('learningPathsDirectory', { required: true });
+    const learningPathHashFile = headPathPrefix + core.getInput('learningPathHashFile', { required: true });
     const suggestions = core.getInput('suggestions', { required: false });
     const oldHash = core.getInput('oldHash', { required: true });
     const newHash = core.getInput('newHash', { required: true });
